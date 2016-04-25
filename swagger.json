@@ -1,0 +1,331 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "HockeyApp API"
+    },
+    "host": "rink.hockeyapp.net",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/api/2",
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "basic_auth": {
+            "type": "basic",
+            "description": "HTTP Basic Authentication"
+        },
+        "api_key": {
+            "type": "apiKey",
+            "name": "X-HockeyAppToken",
+            "in": "header"
+        }
+    },
+    "parameters": {
+        "format": {
+            "name": "format",
+            "in": "query",
+            "description": "bla",
+            "type": "string",
+            "required": false
+        }
+    },
+    "paths": {
+        "/auth_tokens": {
+            "get": {
+                "description": "You can retrieve all tokens and create a new token programmatically through the endpoint /api/2/auth_tokens. This is the only endpoint that requires authentication via the user's email and password.\n",
+                "security": [
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "tokens": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Token"
+                                    }
+                                },
+                                "status": {
+                                    "$ref": "#/definitions/Status"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "rights",
+                        "in": "query",
+                        "description": "bla",
+                        "required": true,
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "tokens": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Token"
+                                    }
+                                },
+                                "status": {
+                                    "$ref": "#/definitions/Status"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/apps": {
+            "get": {
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "apps": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/App"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/upload": {
+            "post": {
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "ipa",
+                        "in": "formData",
+                        "description": "bla",
+                        "required": true,
+                        "type": "file"
+                    },
+                    {
+                        "name": "dsym",
+                        "in": "formData",
+                        "type": "file"
+                    },
+                    {
+                        "name": "notes",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "notes_type",
+                        "in": "formData",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "name": "notify",
+                        "in": "formData",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ]
+                    },
+                    {
+                        "name": "status",
+                        "in": "formData",
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    {
+                        "name": "tags",
+                        "in": "formData",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "teams",
+                        "in": "formData",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "users",
+                        "in": "formData",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "mandatory",
+                        "in": "formData",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "name": "release_type",
+                        "in": "formData",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/App"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/new": {
+            "post": {
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/formdata"
+                ],
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "bundle_identifier",
+                        "in": "formData",
+                        "type": "string",
+                        "enum": [
+                            "iOS",
+                            "Android",
+                            "Mac OS",
+                            "Windows Phone",
+                            "Custom"
+                        ],
+                        "default": "iOS"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/App"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Status": {
+            "type": "string",
+            "enum": [
+                "success",
+                "failure"
+            ]
+        },
+        "Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "rights": {
+                    "type": "integer"
+                }
+            }
+        },
+        "App": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "bundle_identifier": {
+                    "type": "string"
+                },
+                "public_identifier": {
+                    "type": "string"
+                },
+                "device_family": {
+                    "type": "string"
+                },
+                "minimum_os_version": {
+                    "type": "string"
+                },
+                "release_type": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "platform": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
