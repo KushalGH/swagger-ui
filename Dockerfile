@@ -19,8 +19,8 @@ WORKDIR /build
 #RUN     npm install
 #RUN     npm run build
 
-COPY     ./swagger.json /build/dist
-COPY     ./dist /build/
+COPY     ./swagger.json ./dist/
+COPY     dist ./dist/
 
 # The default port of the application
 EXPOSE  8080
